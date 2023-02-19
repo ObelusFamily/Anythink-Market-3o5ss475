@@ -1,10 +1,13 @@
 var router = require("express").Router();
 var mongoose = require("mongoose");
 var Item = mongoose.model("Item");
+require("dotenv").config();
 var Comment = mongoose.model("Comment");
 var User = mongoose.model("User");
 var auth = require("../auth");
+const { Configuration, OpenAIApi } = require('openai');
 const { sendEvent } = require("../../lib/event");
+const checkImage = require("../../scripts/check-if-image");
 
 // Preload item objects on routes with ':item'
 router.param("item", function(req, res, next, slug) {
@@ -137,14 +140,55 @@ router.get("/feed", auth.required, function(req, res, next) {
   });
 });
 
+
+
+
+
+
+
 router.post("/", auth.required, function(req, res, next) {
   User.findById(req.payload.id)
-    .then(function(user) {
+    .then(async function(user) {
       if (!user) {
         return res.sendStatus(401);
       }
+      const checkImage = function isImage (url) {
+        return /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(url);
+      };
+     
 
+    
       var item = new Item(req.body.item);
+
+      if (checkImage(item.image)) { 
+        return item.image = item.image;
+      } else { 
+
+        const configuration = new Configuration({
+          apiKey: process.env.OPENAI_API_KEY,
+        });
+        if (!configuration.apiKey) {
+          return res.status(500).json({
+            error: {
+              message: "OpenAI API key not configured, please follow instructions in README.md",
+            }
+          });
+        }
+        const openai = new OpenAIApi(configuration);
+        const response = await openai.createImage({
+          prompt: "mustang car",
+          n: 1,
+          size: "256x256",
+        });
+      
+        image_url = response.data.data[0].url;
+        console.log(image_url);
+      
+        item.image = image_url
+
+
+      };
+
 
       item.seller = user;
 
@@ -155,6 +199,19 @@ router.post("/", auth.required, function(req, res, next) {
     })
     .catch(next);
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // return a item
 router.get("/:item", auth.optional, function(req, res, next) {
@@ -169,6 +226,13 @@ router.get("/:item", auth.optional, function(req, res, next) {
     })
     .catch(next);
 });
+
+
+
+
+
+
+
 
 // update item
 router.put("/:item", auth.required, function(req, res, next) {
@@ -201,6 +265,11 @@ router.put("/:item", auth.required, function(req, res, next) {
     }
   });
 });
+
+
+
+
+
 
 // delete item
 router.delete("/:item", auth.required, function(req, res, next) {
