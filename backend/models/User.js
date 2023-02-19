@@ -32,8 +32,14 @@ var UserSchema = new mongoose.Schema(
     favorites: [{ type: mongoose.Schema.Types.ObjectId, ref: "Item" }],
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     hash: String,
-    salt: String
+    salt: String,
+    isVerified: {
+      type: Boolean,
+      default: false,
+    }
   },
+  
+  
   { timestamps: true }
 );
 
@@ -75,7 +81,8 @@ UserSchema.methods.toAuthJSON = function() {
     token: this.generateJWT(),
     bio: this.bio,
     image: this.image,
-    role: this.role
+    role: this.role,
+    isVerified: this.isVerified
   };
 };
 
