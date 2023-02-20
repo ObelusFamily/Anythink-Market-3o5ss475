@@ -12,7 +12,11 @@ var ItemSchema = new mongoose.Schema(
     favoritesCount: { type: Number, default: 0 },
     comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
     tagList: [{ type: String }],
-    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" }
+    seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    isVerified: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
@@ -53,6 +57,7 @@ ItemSchema.methods.toJSONFor = function(user) {
     createdAt: this.createdAt,
     updatedAt: this.updatedAt,
     tagList: this.tagList,
+    isVerified: this.isVerified,
     favorited: user ? user.isFavorite(this._id) : false,
     favoritesCount: this.favoritesCount,
     seller: this.seller.toProfileJSONFor(user)
