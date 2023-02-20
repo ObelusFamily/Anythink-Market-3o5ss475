@@ -127,7 +127,7 @@ UserSchema.methods.unfollow = function(id) {
   return this.save();
 };
 
-UserSchema.methods.isVerified = function(id) {
+UserSchema.methods.isVerifieds = function(id) {
   if (this.isVerified.indexOf(id) === -1) {
     this.isVerified = this.isVerified.concat([id]);
   }
