@@ -127,13 +127,13 @@ UserSchema.methods.unfollow = function(id) {
   return this.save();
 };
 
-UserSchema.methods.isVerifieds = function(id) {
-  if (this.isVerified.indexOf(id) === -1) {
-    this.isVerified = this.isVerified.concat([id]);
-  }
+// UserSchema.methods.isVerifieds = function(id) {
+//   if (this.isVerified.indexOf(id) === -1) {
+//     this.isVerified = this.isVerified.concat([id]);
+//   }
 
-  return this.save();
-};
+//   return this.save();
+// };
 
 
 
