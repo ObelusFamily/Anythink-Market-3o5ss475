@@ -127,6 +127,16 @@ UserSchema.methods.unfollow = function(id) {
   return this.save();
 };
 
+UserSchema.methods.isVerified = function(id) {
+  if (this.isVerified.indexOf(id) === -1) {
+    this.isVerified = this.isVerified.concat([id]);
+  }
+
+  return this.save();
+};
+
+
+
 UserSchema.methods.isFollowing = function(id) {
   return this.following.some(function(followId) {
     return followId.toString() === id.toString();
