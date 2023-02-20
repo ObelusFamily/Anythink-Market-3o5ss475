@@ -53,7 +53,17 @@ const ItemPreview = (props) => {
               alt={item.seller.username}
               className="user-pic rounded-circle pr-1"
             />
+
+
           </Link>
+
+
+
+          <div id="item_verified_seller_item"><span className="item-footer"><img src="verified_seller.svg"  alt="" />TOP SELLER</span></div>
+
+
+
+
           <button className="btn btn-outline-secondary" onClick={handleClick}>
             <i className="ion-heart"></i> {item.favoritesCount}
           </button>
