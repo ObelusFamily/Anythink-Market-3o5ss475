@@ -28,7 +28,12 @@ const ItemPreview = (props) => {
       props.favorite(item.slug);
     }
   };
-
+  let TOPSELLER;
+  if(item.seller.isVerified && item.seller.isVerified === true) {
+      TOPSELLER = <div id="item_verified_seller_item" className="item-footer"><img alt="Verified Seller" src="verified_seller.svg"/> TOP SELLER</div>;
+  } else {
+      TOPSELLER = null;
+  }
   return (
     <div
       className="card bg-dark border-light p-3"
@@ -53,17 +58,8 @@ const ItemPreview = (props) => {
               alt={item.seller.username}
               className="user-pic rounded-circle pr-1"
             />
-
-
           </Link>
-
-
-
-          <div id="item_verified_seller_item"><span className="item-footer"><img src="verified_seller.svg"  alt="" />TOP SELLER</span></div>
-
-
-
-
+          {TOPSELLER}
           <button className="btn btn-outline-secondary" onClick={handleClick}>
             <i className="ion-heart"></i> {item.favoritesCount}
           </button>
